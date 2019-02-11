@@ -1,0 +1,24 @@
+// 讀取 Bootstrap 樣式
+@import "~bootstrap/scss/functions";
+@import "./variables";
+@import "~bootstrap/scss/bootstrap";
+
+
+@import "./dashboard";
+@import "./order";
+@import "./customer";
+
+
+// 提示訊息
+.message-alert {
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	z-index: 1100;
+	transform: translateY(-100%);
+	transition: all 0.3s;
+	&.active {
+		transform: translateY(0%);
+	}
+}
