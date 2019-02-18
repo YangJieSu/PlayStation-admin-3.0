@@ -3,7 +3,11 @@
     <!--loading :active.sync="isLoading"></loading-->
     <div class="d-flex mt-4">
       <h3 class="m-0">商品上架管理列表 Product Management</h3>
-      <button class="btn btn-outline-primary ml-auto" @click.prevent="openModal(true)">建立新商品</button>
+      <button
+        class="btn btn-outline-primary ml-auto"
+        @click.prevent="openModal(true)">
+        建立新商品
+      </button>
     </div>
     <table class="table mt-4">
       <thead>
@@ -35,7 +39,10 @@
               class="btn btn-outline-primary btn-sm mx-1"
               @click.prevent="openModal(false, item)"
             >編輯</button>
-            <button class="btn btn-outline-danger btn-sm mx-1" @click.prevent="opendelModal(item)">刪除</button>
+            <button
+              class="btn btn-outline-danger btn-sm mx-1"
+              @click.prevent="opendelModal(item)">刪除
+            </button>
           </td>
         </tr>
       </tbody>
@@ -238,8 +245,9 @@
 </template>
 
 <script>
-import $ from "jquery";
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+import $ from 'jquery';
+
 export default {
   data() {
     return {
@@ -259,77 +267,73 @@ export default {
         vm.tempProduct = Object.assign({}, item);
         vm.isNew = false;
       }
-      $("#productModal").modal("show");
+      $('#productModal').modal('show');
     },
     updateProduct() {
       // 建立與更新商品
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${
-        process.env.VUE_APP_CUSTOM_PATH
-      }/admin/product`;
-      let httpmethod = "post";
-      if (vm.isNew == false) {
-        api = `${process.env.VUE_APP_API_PATH}/api/${
-          process.env.VUE_APP_CUSTOM_PATH
-        }/admin/product/${vm.tempProduct.id}`;
-        httpmethod = "put";
+      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/admin/product`;
+      let httpmethod = 'post';
+      if (vm.isNew === false) {
+        api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/admin/product/${vm.tempProduct.id}`;
+        httpmethod = 'put';
       }
       // 可做驗證，防止無資料卻能新增產品
-      this.$http[httpmethod](api, { data: vm.tempProduct }).then(response => {
+      this.$http[httpmethod](api, { data: vm.tempProduct }).then((response) => {
         if (response.data.success) {
-          $("#productModal").modal("hide");
+          $('#productModal').modal('hide');
           vm.$store.dispatch('productsModules/getProducts');
         }
       });
     },
     opendelModal(item) {
-      //開啟 刪除商品  modal
+      // 開啟 刪除商品  modal
       const vm = this;
       vm.tempProduct = Object.assign({}, item);
-      $("#delProductModal").modal("show");
+      $('#delProductModal').modal('show');
     },
     delProduct(id) {
       // 刪除商品
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${
+      const api = `${process.env.VUE_APP_API_PATH}/api/${
         process.env.VUE_APP_CUSTOM_PATH
-        }/admin/product/${id}`;
-      this.$http.delete(api).then(response => {
+      }/admin/product/${id}`;
+      this.$http.delete(api).then((response) => {
         if (response.data.success) {
-          $("#delProductModal").modal("hide");
+          $('#delProductModal').modal('hide');
           vm.$bus.$emit('AlertMessage', response.data.message, 'success');
           vm.$store.dispatch('productsModules/getProducts');
         } else {
-          $("#delProductModal").modal("hide");
+          $('#delProductModal').modal('hide');
           vm.$bus.$emit('AlertMessage', response.data.message, 'danger');
-        };
+        }
       });
     },
     uploadPicture() {
       // 上傳商品圖片
       const vm = this;
       // files <= 此名稱與上方  ref=files 相同 ，可以自定義名稱
-      let pictureFile = vm.$refs.files.files[0];
-      let pictureData = new FormData();
-      let api = `${process.env.VUE_APP_API_PATH}/api/${
+      const pictureFile = vm.$refs.files.files[0];
+      const pictureData = new FormData();
+      const api = `${process.env.VUE_APP_API_PATH}/api/${
         process.env.VUE_APP_CUSTOM_PATH
       }/admin/upload`;
-      pictureData.append("file-to-upload", pictureFile);
+      pictureData.append('file-to-upload', pictureFile);
       vm.$store.dispatch('loadingIcon', true);
       this.$http.post(api, pictureData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        })
-        .then(response => {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then((response) => {
           vm.$store.dispatch('loadingIcon', false);
           if (response.data.success) {
-            vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
+            vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl);
           } else {
-            vm.$bus.$emit("AlertMessage", response.data.message, "danger");
+            vm.$bus.$emit('AlertMessage', response.data.message, 'danger');
           }
         });
-    }
+    },
   },
   computed: {
     ...mapGetters('productsModules', ['products']),
@@ -338,6 +342,6 @@ export default {
   created() {
     // this.getProducts();
     this.$store.dispatch('productsModules/getProducts');
-  }
+  },
 };
 </script>

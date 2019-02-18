@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/sign_in',
       name: 'SignIn',
-      component: () => import('./views/SignIn.vue')
+      component: () => import('./views/SignIn.vue'),
     },
     {
       path: '/admin',
@@ -51,9 +51,9 @@ export default new Router({
         {
           path: 'customer_checkout/:orderId',
           name: 'CustomerCheckout',
-          component: () => import('./views/CustomerCheckout.vue')
+          component: () => import('./views/CustomerCheckout.vue'),
         },
       ],
-    }
-  ]
-})
+    },
+  ],
+});

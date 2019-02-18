@@ -11,12 +11,12 @@ import cartModules from './cart';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  strict: true, //嚴謹模式
+  strict: true, // 嚴謹模式
   state: {
     isLoading: false,
     status: {
       loadingItem: '',
-      loadingIcon: false
+      loadingIcon: false,
     },
     pagination: {},
     // orders: [],
@@ -28,7 +28,7 @@ export default new Vuex.Store({
     // context 固定， payload 外部傳進來的資料
     // xxxx(context, payload) {}
     updateLoading(context, status) {
-      context.commit('LOADING', status)
+      context.commit('LOADING', status);
     },
     loadingIcon(context, status) {
       context.commit('LOADING_ITEM', status);
@@ -154,7 +154,7 @@ export default new Vuex.Store({
     },
     status(state) {
       return state.status;
-    }
+    },
     // orders(state) {
     //   return state.orders;
     // },
@@ -169,6 +169,6 @@ export default new Vuex.Store({
     productsModules,
     ordersModules,
     couponModules,
-    cartModules
-  }
+    cartModules,
+  },
 });

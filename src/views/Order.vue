@@ -18,8 +18,12 @@
               </div>
               <div class="d-flex justify-content-between align-items-baseline prod-price">
                 <div class="h5" v-if="!item.price">{{ item.origin_price | currency }}元</div>
-                <del class="font-italic" v-if="item.price">原價 {{ item.origin_price | currency }}</del>
-                <div class="h5 text-danger font-weight-bold" v-if="item.price">售價 {{ item.price | currency }}</div>
+                <del class="font-italic" v-if="item.price">
+                  原價 {{ item.origin_price | currency }}
+                </del>
+                <div class="h5 text-danger font-weight-bold" v-if="item.price">
+                  售價 {{ item.price | currency }}
+                </div>
               </div>
             </div>
             <div class="card-footer d-flex">
@@ -71,8 +75,12 @@
             </div>
             <div class="d-flex justify-content-between align-items-baseline">
               <div class="h5" v-if="!product.price">{{ product.origin_price | currency }} 元</div>
-              <del class="font-italic" v-if="product.price">原價 {{ product.origin_price | currency }} 元</del>
-              <div class="h5 text-danger font-weight-bold" v-if="product.price">售價 {{ product.price | currency }} 元</div>
+              <del class="font-italic" v-if="product.price">
+                原價 {{ product.origin_price | currency }} 元
+              </del>
+              <div class="h5 text-danger font-weight-bold" v-if="product.price">
+                售價 {{ product.price | currency }} 元
+              </div>
             </div>
             <select name class="form-control mt-3" v-model="buyNum">
               <option value="0" selected disabled>請選擇商品數量</option>
@@ -209,7 +217,13 @@
 
         <div class="form-group">
           <label for="useraddress">留言</label>
-          <textarea name id class="form-control" cols="30" rows="10" v-model="form.message"></textarea>
+          <textarea
+            id="useraddress"
+            class="form-control"
+            cols="30"
+            rows="10"
+            v-model="form.message">
+          </textarea>
         </div>
         <div class="text-right">
           <button class="btn btn-danger">送出訂單</button>
@@ -221,16 +235,17 @@
 
 
 <script>
-import $ from "jquery";
-import {mapActions, mapGetters} from 'vuex';
+import $ from 'jquery';
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
       product: {},
-      coupon_code: "",
+      coupon_code: '',
       buyNum: 1,
       form: {
-        user: {}
+        user: {},
       },
     };
   },
@@ -240,14 +255,12 @@ export default {
     getProduct(id) {
       // 取得單一商品內容
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${
-        process.env.VUE_APP_CUSTOM_PATH
-      }/product/${id}`;
-      this.$http.get(api).then(response => {
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/product/${id}`;
+      this.$http.get(api).then((response) => {
         if (response.data.success) {
           vm.product = response.data.product;
           vm.buyNum = 1;
-          $("#productModal").modal("show");
+          $('#productModal').modal('show');
         }
       });
     },
@@ -255,7 +268,7 @@ export default {
       // 加入購物車
       const vm = this;
       vm.$store.dispatch('cartModules/addtoCart', { id, qty });
-      $("#productModal").modal("hide");
+      $('#productModal').modal('hide');
     },
     removeCart(id) {
       const vm = this;
@@ -264,45 +277,45 @@ export default {
     addCouponCode() {
       // 套用優惠券
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/coupon`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/coupon`;
       const coupon = {
-        code: vm.coupon_code
+        code: vm.coupon_code,
       };
       vm.$store.dispatch('updateLoading', true);
-      this.$http.post(api, { data: coupon }).then(response => {
+      this.$http.post(api, { data: coupon }).then((response) => {
         vm.$store.dispatch('updateLoading', false);
         if (response.data.success) {
           vm.$store.dispatch('cartModules/getCart');
         } else {
-          alert(response.data.message);
+          vm.$bus.$emit('AlertMessage', response.data.message, 'danger');
         }
       });
     },
     creatOrder() {
       // 結帳頁面
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order`;
-      this.$validator.validate().then(result => {
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order`;
+      this.$validator.validate().then((result) => {
         if (result) {
-          this.$http.post(api, { data: vm.form }).then(response => {
+          this.$http.post(api, { data: vm.form }).then((response) => {
             vm.$router.push(`/customer_checkout/${response.data.orderId}`);
           });
         } else {
-          console.log("欄位不完整");
+          console.log('欄位不完整');
         }
       });
-    }
+    },
   },
   computed: {
     ...mapGetters('productsModules', ['products']),
     ...mapGetters(['pagination', 'status']),
-    ...mapGetters('cartModules', ['carts'])
+    ...mapGetters('cartModules', ['carts']),
   },
   created() {
     // this.getProducts();
     // this.getCart();
     this.$store.dispatch('productsModules/getProducts');
     this.$store.dispatch('cartModules/getCart');
-  }
+  },
 };
 </script>

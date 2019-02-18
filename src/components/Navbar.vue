@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       isLogin: false,
-      currentPage: "Products"
+      currentPage: 'Products',
     };
   },
   methods: {
@@ -84,10 +84,9 @@ export default {
       // 登出
       const api = `${process.env.VUE_APP_API_PATH}/logout`;
       const vm = this;
-      this.$http.post(api).then(response => {
-        console.log(response.data);
+      this.$http.post(api).then((response) => {
         if (response.data.success) {
-          vm.$router.push("/sign_in");
+          vm.$router.push('/sign_in');
         }
       });
     },
@@ -95,8 +94,7 @@ export default {
       // 登入驗證
       const api = `${process.env.VUE_APP_API_PATH}/api/user/check`;
       const vm = this;
-      this.$http.post(api).then(response => {
-        console.log(response.data);
+      this.$http.post(api).then((response) => {
         if (response.data.success) {
           vm.isLogin = true;
         } else {
@@ -107,12 +105,12 @@ export default {
     },
     Page() {
       this.currentPage = this.$router.history.current.name;
-    }
+    },
   },
   created() {
     this.userCheck();
     this.Page();
-  }
+  },
 };
 </script>
 

@@ -4,4 +4,4 @@ export default function (num) {
     const currency = (i && c !== '.' && ((a.length - i) % 3 === 0) ? `, ${c}`.replace(/\s/g, '') : c);
     return currency;
   })}`;
-};
+}

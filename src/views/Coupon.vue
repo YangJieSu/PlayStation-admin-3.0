@@ -3,7 +3,9 @@
     <!--loading :active.sync="isLoading"></loading-->
     <div class="d-flex mt-4">
       <h3 class="m-0">優惠券列表</h3>
-      <button class="btn btn-outline-primary ml-auto" @click.prevent="openCouponModal(true)">建立優惠券</button>
+      <button class="btn btn-outline-primary ml-auto" @click.prevent="openCouponModal(true)">
+        建立優惠券
+      </button>
     </div>
     <table class="table mt-4">
       <thead>
@@ -25,8 +27,13 @@
             <span class="text-dark font-weight-bold" v-else>尚未啟用</span>
           </td>
           <td>
-            <button class="btn btn-outline-primary btn-sm" @click.prevent="openCouponModal(false, item)">編輯</button>
-            <button class="btn btn-outline-danger btn-sm" @click.prevent="opendelModal(item)">刪除</button>
+            <button class="btn btn-outline-primary btn-sm"
+              @click.prevent="openCouponModal(false, item)">
+              編輯
+            </button>
+            <button class="btn btn-outline-danger btn-sm" @click.prevent="opendelModal(item)">
+              刪除
+            </button>
           </td>
         </tr>
       </tbody>
@@ -58,7 +65,7 @@
             </div>
             <div class="form-group">
               <label for="due_date">到期日</label>
-              <input type="date" class="form-control" 
+              <input type="date" class="form-control"
                 v-model="tempCoupon.due_date"
               id="due_date">
             </div>
@@ -82,8 +89,12 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-outline-primary" @click.prevent="updateCoupon">更新優惠券</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-outline-primary" @click.prevent="updateCoupon">
+              更新優惠券
+            </button>
           </div>
         </div>
       </div>
@@ -106,21 +117,25 @@
             是否刪除 <strong class="text-danger">{{ tempCoupon.title }}</strong> 商品(刪除後將無法恢復)。
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-danger" @click.prevent="delCoupon(tempCoupon.id)">確認刪除</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              取消
+            </button>
+            <button type="button" class="btn btn-danger" @click.prevent="delCoupon(tempCoupon.id)">
+              確認刪除
+            </button>
           </div>
         </div>
       </div>
     </div>
 
 
-    
   </div>
 </template>
 
 <script>
 import $ from 'jquery';
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -145,7 +160,7 @@ export default {
       } else {
         vm.tempCoupon = Object.assign({}, item);
         vm.isNew = false;
-      };
+      }
       $('#couponModal').modal('show');
     },
     updateCoupon() {
@@ -153,26 +168,26 @@ export default {
       const vm = this;
       let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/admin/coupon`;
       let httpmethod = 'post';
-      if (vm.isNew == false) {
+      if (vm.isNew === false) {
         api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/admin/coupon/${vm.tempCoupon.id}`;
         httpmethod = 'put';
-      };
-      this.$http[httpmethod](api, { data: vm.tempCoupon}).then((response) => {
+      }
+      this.$http[httpmethod](api, { data: vm.tempCoupon }).then((response) => {
         if (response.data.success) {
           $('#couponModal').modal('hide');
           vm.$store.dispatch('couponModules/getCoupons');
-        };
+        }
       });
     },
     opendelModal(item) {
-      //開啟 刪除優惠券  modal
+      // 開啟 刪除優惠券  modal
       const vm = this;
       vm.tempCoupon = Object.assign({}, item);
       $('#delCouponModal').modal('show');
-    }
+    },
   },
   computed: {
-    ...mapGetters('couponModules', ['coupons'])
+    ...mapGetters('couponModules', ['coupons']),
   },
   created() {
     // this.getCoupons();

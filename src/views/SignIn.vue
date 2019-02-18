@@ -11,15 +11,19 @@
           <form class="form-signin rounded" @submit.prevent="signIn">
             <h1 class="h3 mb-3 mx-auto font-weight-bold text-primary text-center">後台管理系統</h1>
             <label for="inputEmail" class="sr-only">登入 ID (電子郵件位址)</label>
-            <input type="email" id="inputEmail" class="form-control" 
-            v-model="user.username"  
+            <input type="email" id="inputEmail" class="form-control"
+            v-model="user.username"
             placeholder="登入 ID (電子郵件位址)" required autofocus>
             <label for="inputPassword" class="sr-only">密碼</label>
             <input type="password" id="inputPassword" class="form-control"
-            v-model="user.password" 
+            v-model="user.password"
             placeholder="密碼" required>
             <div class="form-group form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1" v-model="user.isRemember">
+              <input type="checkbox"
+                class="form-check-input"
+                id="exampleCheck1"
+                v-model="user.isRemember"
+              >
               <label class="form-check-label" for="exampleCheck1">記住我</label>
             </div>
             <button class="btn btn-lg btn-warning btn-block" type="submit">
@@ -35,56 +39,61 @@
 </template>
 
 <script>
-import Alert from '@/components/AlertMessage';
-import {mapGetters} from 'vuex';
-  export default {
-    components: {
-      Alert
-    },
-    data() {
-      return {
-        user: {
-          username: '',
-          password: '',
-          isRemember: false
-        }
-      };
-    },
-    methods: {
-      signIn() {
-        let api = `${process.env.VUE_APP_API_PATH}/admin/signin`;
-        const vm = this;
-        vm.$store.dispatch('loadingIcon', true);
-        localStorage.setItem('isRemember', vm.user.isRemember);
-        vm.user.isRemember ? localStorage.setItem('userAccount', vm.user.username) : localStorage.removeItem('userAccount');
-        this.$http.post(api, vm.user).then((response) => {
-          console.log(response.data);
-          vm.$store.dispatch('loadingIcon', false);
-          if (response.data.success) {
-            vm.$router.push('/admin/products');
-          } else {
-            vm.$bus.$emit('AlertMessage', `【${response.data.message}】`, 'danger');
-          };
-        });
+import { mapGetters } from 'vuex';
+import Alert from '../components/AlertMessage.vue';
+
+export default {
+  components: {
+    Alert,
+  },
+  data() {
+    return {
+      user: {
+        username: '',
+        password: '',
+        isRemember: false,
       },
-      rememberMe() {
-        const userAccount = localStorage.getItem('userAccount') || '';
-        const remember = localStorage.getItem('isRemember') || false;
-        const vm = this;
-        if(remember === 'true') {
-          vm.user.username = userAccount;
-          vm.user.isRemember = true;
+    };
+  },
+  methods: {
+    signIn() {
+      const api = `${process.env.VUE_APP_API_PATH}/admin/signin`;
+      const vm = this;
+      vm.$store.dispatch('loadingIcon', true);
+      localStorage.setItem('isRemember', vm.user.isRemember);
+      if (vm.user.isRemember) {
+        localStorage.setItem('userAccount', vm.user.username);
+      } else {
+        localStorage.removeItem('userAccount');
+      }
+      this.$http.post(api, vm.user).then((response) => {
+        console.log(response.data);
+        vm.$store.dispatch('loadingIcon', false);
+        if (response.data.success) {
+          vm.$router.push('/admin/products');
+        } else {
+          vm.$bus.$emit('AlertMessage', `【${response.data.message}】`, 'danger');
         }
-      },
+      });
     },
-    computed: {
-      ...mapGetters(['status']),
+    rememberMe() {
+      const userAccount = localStorage.getItem('userAccount') || '';
+      const remember = localStorage.getItem('isRemember') || false;
+      const vm = this;
+      if (remember === 'true') {
+        vm.user.username = userAccount;
+        vm.user.isRemember = true;
+      }
     },
-    mounted() {
-      const vm = this; 
-      vm.rememberMe();
-    },
-  };
+  },
+  computed: {
+    ...mapGetters(['status']),
+  },
+  mounted() {
+    const vm = this;
+    vm.rememberMe();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

@@ -65,15 +65,15 @@ export default {
     return {
       orderId: '',
       order: {
-        user: {}
-      }
+        user: {},
+      },
     };
   },
   methods: {
     getOrder() {
       // 取得單一訂單
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order/${vm.orderId}`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/order/${vm.orderId}`;
       this.$http.get(api).then((response) => {
         vm.order = response.data.order;
       });
@@ -81,20 +81,20 @@ export default {
     payOrder() {
       // 付款
       const vm = this;
-      let api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/pay/${vm.orderId}`;
+      const api = `${process.env.VUE_APP_API_PATH}/api/${process.env.VUE_APP_CUSTOM_PATH}/pay/${vm.orderId}`;
       vm.$store.dispatch('updateLoading', true);
       this.$http.post(api).then((response) => {
         vm.$store.dispatch('updateLoading', false);
         if (response.data.success) {
           vm.getOrder();
-        };
+        }
       });
     },
   },
   created() {
     const vm = this;
-    this.orderId = this.$route.params.orderId;
-    this.getOrder();
+    vm.orderId = this.$route.params.orderId;
+    vm.getOrder();
   },
 };
 </script>

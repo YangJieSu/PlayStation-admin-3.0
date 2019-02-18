@@ -12,8 +12,9 @@
 </template>
 
 <script>
-import Navbar from '@/components/Navbar';
-import Alert from '@/components/AlertMessage';
+import Navbar from './Navbar.vue';
+import Alert from './AlertMessage.vue';
+
 export default {
   data() {
     return {};
@@ -25,7 +26,7 @@ export default {
   computed: {
     isLoading() {
       return this.$store.state.isLoading;
-    }
+    },
   },
 };
 </script>

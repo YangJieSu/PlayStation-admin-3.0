@@ -43,13 +43,15 @@ export default {
   props: {
     pageData: {
       type: Object,
-      default: {}
+      default() {
+        return {};
+      },
     },
   },
   methods: {
     changePage(page) {
       this.$emit('changepage', page);
-    }
-  }
-}
+    },
+  },
+};
 </script>
