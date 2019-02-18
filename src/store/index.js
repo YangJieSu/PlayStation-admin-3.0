@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
-import $ from 'jquery';
 
 import productsModules from './product';
 import ordersModules from './orders';
