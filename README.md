@@ -1,7 +1,7 @@
 # Vue.js 購物網站-ADMIN管理系統
 
 ## Demo
-https://yangjiesu.github.io/PlayStation-admin-3.0/dist
+https://syj0905.github.io/PlayStation-admin-3.0/dist
 ## Intro Management Systems
 
 ### 1. Sign In
